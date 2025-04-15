@@ -28,8 +28,8 @@ public class GatewayConfig {
                         .uri("lb://PaymentService"))
                 .route("InventoryService", r -> r.path("/api/inventory/**")
                         .uri("lb://InventoryService"))
-                .route("ProductService", r -> r.path("/products/**")
-                        .uri("lb://ProductService"))
+                .route("ShippingService", r -> r.path("/api/shipping/**")
+                        .uri("lb://ShippingService"))
                 .build();
     }
 }
