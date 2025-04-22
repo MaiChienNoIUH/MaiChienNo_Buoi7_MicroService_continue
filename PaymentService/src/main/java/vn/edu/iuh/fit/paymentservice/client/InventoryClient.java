@@ -8,7 +8,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "inventory-service")
+import java.util.concurrent.CompletableFuture;
+
+@FeignClient(name = "InventoryService", url = "http://localhost:9002")
 public interface InventoryClient {
 
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallback")
@@ -16,9 +18,9 @@ public interface InventoryClient {
     @RateLimiter(name = "inventory")
     @TimeLimiter(name = "inventory")
     @PostMapping("/api/inventory/decrease")
-    String decreaseStock(@RequestParam String productId, @RequestParam int quantity);
+    CompletableFuture<String> decreaseStock(@RequestParam String productId, @RequestParam int quantity);
 
-    default String fallback(String productId, int quantity, Throwable ex) {
-        return "Inventory service fallback: " + ex.getMessage();
+    default CompletableFuture<String> fallback(String productId, int quantity, Throwable ex) {
+        return CompletableFuture.completedFuture("Inventory service fallback: " + ex.getMessage());
     }
 }

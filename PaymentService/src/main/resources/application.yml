@@ -24,11 +24,11 @@ resilience4j:
   ratelimiter:
     instances:
       inventory:
-        limitForPeriod: 20
-        limitRefreshPeriod: 1s
+        limitForPeriod: 5
+        limitRefreshPeriod: 10s
       shipping:
-        limitForPeriod: 20
-        limitRefreshPeriod: 1s
+        limitForPeriod: 5
+        limitRefreshPeriod: 10s
 
   timelimiter:
     instances:

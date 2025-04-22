@@ -10,13 +10,15 @@ import java.util.concurrent.CompletableFuture;
 public class ShippingController {
 
     @PostMapping("/create")
-    public CompletableFuture<ResponseEntity<String>> createShipping(@RequestParam String orderId) {
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok("Shipping created for order: " + orderId));
+    public ResponseEntity<String> createShipping(@RequestParam String orderId) {
+        // Trả về ResponseEntity trực tiếp, không cần CompletableFuture
+        return ResponseEntity.ok("Shipping created for order: " + orderId);
     }
 
     @PutMapping("/{orderId}/status")
-    public CompletableFuture<ResponseEntity<String>> updateStatus(@PathVariable String orderId, @RequestParam String status) {
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok("Updated shipping status for order " + orderId + " to " + status));
+    public ResponseEntity<String> updateStatus(@PathVariable String orderId, @RequestParam String status) {
+        // Trả về ResponseEntity trực tiếp, không cần CompletableFuture
+        return ResponseEntity.ok("Updated shipping status for order " + orderId + " to " + status);
     }
 }
 

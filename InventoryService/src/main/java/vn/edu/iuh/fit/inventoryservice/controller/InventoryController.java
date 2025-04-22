@@ -10,12 +10,14 @@ import java.util.concurrent.CompletableFuture;
 public class InventoryController {
 
     @PostMapping("/decrease")
-    public CompletableFuture<ResponseEntity<String>> decreaseStock(@RequestParam String productId, @RequestParam int quantity) {
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok("Decreased stock for product " + productId + " by " + quantity));
+    public ResponseEntity<String> decreaseStock(@RequestParam String productId, @RequestParam int quantity) {
+        // Trả về ResponseEntity trực tiếp, không cần CompletableFuture
+        return ResponseEntity.ok("Decreased stock for product " + productId + " by " + quantity);
     }
 
     @PostMapping("/increase")
-    public CompletableFuture<ResponseEntity<String>> increaseStock(@RequestParam String productId, @RequestParam int quantity) {
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok("Increased stock for product " + productId + " by " + quantity));
+    public ResponseEntity<String> increaseStock(@RequestParam String productId, @RequestParam int quantity) {
+        // Trả về ResponseEntity trực tiếp, không cần CompletableFuture
+        return ResponseEntity.ok("Increased stock for product " + productId + " by " + quantity);
     }
 }

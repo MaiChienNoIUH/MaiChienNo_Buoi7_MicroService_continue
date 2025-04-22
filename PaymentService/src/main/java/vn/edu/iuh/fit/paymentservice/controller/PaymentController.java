@@ -22,12 +22,25 @@ public class PaymentController {
 
     @PostMapping
     public CompletableFuture<ResponseEntity<String>> makePayment() {
-        return CompletableFuture.supplyAsync(() -> {
-            String inventoryResponse = inventoryClient.decreaseStock("product123", 1);
-            String paymentId = UUID.randomUUID().toString();
-            String shippingResponse = shippingClient.createShipping(paymentId);
-            return ResponseEntity.ok("Payment successful with ID: " + paymentId + ". " + inventoryResponse + ". " + shippingResponse);
-        });
+        // Bắt đầu 2 cuộc gọi bất đồng bộ đến Inventory và Shipping service
+        CompletableFuture<String> inventoryResponse = inventoryClient.decreaseStock("product123", 1);
+        String paymentId = UUID.randomUUID().toString();
+        CompletableFuture<String> shippingResponse = shippingClient.createShipping(paymentId);
+
+        // Khi cả 2 cuộc gọi đều hoàn thành, trả về kết quả
+        return CompletableFuture.allOf(inventoryResponse, shippingResponse)
+                .thenApplyAsync(v -> {
+                    try {
+                        // Chờ kết quả từ cả Inventory và Shipping
+                        String inventoryResult = inventoryResponse.get();
+                        String shippingResult = shippingResponse.get();
+
+                        // Trả về ResponseEntity khi tất cả hoàn thành
+                        return ResponseEntity.ok("Payment successful with ID: " + paymentId + ". " + inventoryResult + ". " + shippingResult);
+                    } catch (Exception e) {
+                        return ResponseEntity.status(500).body("Error during payment processing: " + e.getMessage());
+                    }
+                });
     }
 
     @PutMapping("/{id}/refund")
